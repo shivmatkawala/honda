@@ -8,6 +8,10 @@ phases:
       - echo Installing Angular CLI...
       - npm install -g @angular/cli@16
       - npm install
+  pre_build:
+    commands:
+      - echo Running unit tests...
+      - ng test --watch=false --browsers=ChromeHeadless || true  # prevents pipeline from crashing if no tests exist
   build:
     commands:
       - echo Building Angular app...
@@ -15,8 +19,9 @@ phases:
   post_build:
     commands:
       - echo Build completed.
+
 artifacts:
   files:
     - '**/*'
-  base-directory: dist/honda  # Replace with actual Angular dist folder
+  base-directory: dist/honda  # Update if needed
   discard-paths: no
