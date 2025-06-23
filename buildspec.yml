@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo Installing Angular CLI...
+      - npm install -g @angular/cli@16
+      - npm install
+  build:
+    commands:
+      - echo Building Angular app...
+      - ng build --configuration development
+  post_build:
+    commands:
+      - echo Build completed.
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist/honda  # Replace with actual Angular dist folder
+  discard-paths: no
