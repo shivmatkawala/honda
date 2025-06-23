@@ -8,14 +8,19 @@ phases:
       - echo Installing Angular CLI...
       - npm install -g @angular/cli@16
       - npm install
+      - echo Installing Chrome for Headless Testing...
+      - curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm -o chrome.rpm
+      - yum install -y atk cups-libs gtk3 libXcomposite libXcursor libXdamage libXrandr alsa-lib libXScrnSaver libXtst xorg-x11-fonts-Type1 xorg-x11-fonts-misc
+      - yum localinstall -y chrome.rpm || yum install -y google-chrome-stable
   pre_build:
     commands:
       - echo Running unit tests...
-      - ng test --watch=false --browsers=ChromeHeadless || true  # prevents pipeline from crashing if no tests exist
+      - export CHROME_BIN=$(which google-chrome)
+      - ng test --watch=false --browsers=ChromeHeadless
   build:
     commands:
       - echo Building Angular app...
-      - ng build --configuration development
+      - ng build --configuration production
   post_build:
     commands:
       - echo Build completed.
@@ -23,5 +28,5 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: dist/honda  # Update if needed
+  base-directory: dist/honda
   discard-paths: no
